@@ -321,6 +321,113 @@ def build_column_map(headers: list[str]) -> dict[str, int]:
     }
 
 
+def build_column_map(headers: list[str]) -> dict[str, int]:
+    orders_idx = find_first(headers, [("Р·Р°РєР°Р·С‹, С€С‚",), ("Р·Р°РєР°Р·С‹",)])
+    sales_idx = find_first(
+        headers,
+        [("РєРѕР»РёС‡РµСЃС‚РІРѕ РїСЂРѕРґР°Р¶",), ("РїСЂРѕРґР°Р¶Рё, С€С‚",), ("units",), ("С€С‚",)],
+        exclude=[orders_idx],
+    )
+    revenue_idx = find_first(headers, [("СЃСѓРјРјР° РїСЂРѕРґР°Р¶",), ("РІС‹СЂСѓС‡РєР°",)])
+    sku_store_idx = find_first(headers, [("sku РјР°РіР°Р·РёРЅР°",), ("Р°СЂС‚РёРєСѓР»",), ("sku",)])
+
+    normalized = [normalize_header(h) for h in headers]
+    sku_ozon_idx = None
+    for idx, header in enumerate(normalized):
+        if idx == sku_store_idx:
+            continue
+        if "sku ozon" in header or "sku wb" in header or "id карточки" in header:
+            sku_ozon_idx = idx
+            break
+    if sku_ozon_idx is None:
+        for idx, header in enumerate(normalized):
+            if idx != sku_store_idx and "sku" in header:
+                sku_ozon_idx = idx
+                break
+    if sku_ozon_idx is None:
+        sku_ozon_idx = sku_store_idx
+
+    return {
+        "sku_store": sku_store_idx,
+        "sku_ozon": sku_ozon_idx,
+        "orders": orders_idx,
+        "sales_units": sales_idx,
+        "revenue": revenue_idx,
+        "drr": find_first(headers, [("tacoo",), ("РґСЂРґ",), ("РґСЂСЂ",)]),
+        "roce": find_first(headers, [("roce",)]),
+        "profit": find_first(headers, [("С‡РёСЃС‚Р°СЏ РїСЂРёР±С‹Р»СЊ",), ("profit",)]),
+        "stock": find_first(headers, [("РґРѕСЃС‚СѓРїРЅРѕ Рє РїСЂРѕРґР°Р¶Рµ",), ("РѕСЃС‚Р°С‚РѕРє",)]),
+    }
+
+
+def build_column_map(headers: list[str]) -> dict[str, int]:
+    normalized = [normalize_header(h) for h in headers]
+
+    def find_idx(candidates: list[str], *, exclude: set[int] | None = None) -> int:
+        excluded = exclude or set()
+        for candidate in candidates:
+            for idx, header in enumerate(normalized):
+                if idx in excluded:
+                    continue
+                if candidate in header:
+                    return idx
+        raise KeyError(f"Column not found for candidates: {candidates}")
+
+    sku_store_idx = find_idx(
+        [
+            "sku \u043c\u0430\u0433\u0430\u0437\u0438\u043d\u0430",
+            "\u0430\u0440\u0442\u0438\u043a\u0443\u043b \u043c\u0430\u0433\u0430\u0437\u0438\u043d\u0430",
+            "\u0430\u0440\u0442\u0438\u043a\u0443\u043b",
+        ]
+    )
+    sku_market_idx = None
+    for candidate in ["sku ozon", "sku wb", "id \u043a\u0430\u0440\u0442\u043e\u0447\u043a\u0438", "sku"]:
+        for idx, header in enumerate(normalized):
+            if idx == sku_store_idx:
+                continue
+            if candidate in header:
+                sku_market_idx = idx
+                break
+        if sku_market_idx is not None:
+            break
+    if sku_market_idx is None:
+        sku_market_idx = sku_store_idx
+
+    orders_idx = find_idx(["\u0437\u0430\u043a\u0430\u0437\u044b"])
+    sales_idx = find_idx(
+        [
+            "\u043a\u043e\u043b-\u0432\u043e \u043f\u0440\u043e\u0434\u0430\u0436",
+            "\u043f\u0440\u043e\u0434\u0430\u0436\u0438, \u0448\u0442",
+            "units",
+        ],
+        exclude={orders_idx},
+    )
+    revenue_idx = find_idx(
+        [
+            "\u0441\u0443\u043c\u043c\u0430 \u043f\u0440\u043e\u0434\u0430\u0436",
+            "\u0432\u044b\u0440\u0443\u0447\u043a\u0430",
+        ]
+    )
+
+    return {
+        "sku_store": sku_store_idx,
+        "sku_ozon": sku_market_idx,
+        "orders": orders_idx,
+        "sales_units": sales_idx,
+        "revenue": revenue_idx,
+        "drr": find_idx(["tacoo", "\u0434\u0440\u0440", "\u0434\u0440\u0434"]),
+        "roce": find_idx(["roce"]),
+        "profit": find_idx(["\u0447\u0438\u0441\u0442\u0430\u044f \u043f\u0440\u0438\u0431\u044b\u043b\u044c", "profit"]),
+        "stock": find_idx(
+            [
+                "\u043f\u043e\u043b\u043d\u044b\u0439 \u043e\u0441\u0442\u0430\u0442\u043e\u043a",
+                "\u0434\u043e\u0441\u0442\u0443\u043f\u043d\u043e \u043a \u043f\u0440\u043e\u0434\u0430\u0436\u0435",
+                "\u043e\u0441\u0442\u0430\u0442\u043e\u043a",
+            ]
+        ),
+    }
+
+
 def choose_weekly_periods(periods: list[PeriodInfo]) -> list[PeriodInfo]:
     weekly = [p for p in periods if 6 <= p.days <= 8]
     if len(weekly) >= 4:

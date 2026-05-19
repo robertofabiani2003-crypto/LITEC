@@ -23,7 +23,7 @@ Use this skill for the local Ozon SKU deck generator in this skill folder. This 
 2. Run:
 
 ```powershell
-python <skill-folder>\scripts\generate_ozon_sku_presentation.py --input-xlsx "<workbook.xlsx>" --template-pptx "<template.pptx>" --output-pptx "<output.pptx>"
+python C:\Users\rober\.codex\skills\ozon-sku-presentation\scripts\generate_ozon_sku_presentation.py --input-xlsx "<workbook.xlsx>" --template-pptx "<template.pptx>" --output-pptx "<output.pptx>"
 ```
 
 3. Verify the script prints `Saved:` and that the output file exists.
@@ -44,4 +44,3 @@ Do not rewrite the analytical logic unless the input workbook structure changed 
 - The script accepts CLI args for workbook, template, and output paths.
 - The current SKU set and manual stock overrides remain embedded in the script.
 - Prefer reusing the existing generator instead of rebuilding the deck logic from scratch.
-- Replace `<skill-folder>` with the local installed path to this skill.
