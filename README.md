@@ -1,50 +1,48 @@
-# Ozon SKU Presentation Skill
+# LITEC Codex Skills
 
-This repository contains a shareable Codex skill for generating a fixed-format Ozon SKU PowerPoint deck from:
+This repository is a collection of shareable Codex skills.
+
+## Structure
+
+Each skill lives in its own folder under `skills/`.
+
+```text
+skills/
+  ozon-sku-presentation/
+    SKILL.md
+    agents/openai.yaml
+    scripts/generate_ozon_sku_presentation.py
+```
+
+## Available skills
+
+### `ozon-sku-presentation`
+
+Generates a fixed-format Ozon SKU PowerPoint deck from:
 
 - a merged Excel workbook (`.xlsx`)
 - a PowerPoint template (`.pptx`)
 
-## Contents
+Skill path in this repository:
 
-- `SKILL.md` - skill entrypoint and usage instructions
-- `agents/openai.yaml` - Codex UI metadata
-- `scripts/generate_ozon_sku_presentation.py` - deck generator
+```text
+skills/ozon-sku-presentation
+```
 
 ## Install
 
-Install this skill from GitHub into your local Codex skills directory.
-
-Example:
-
-```powershell
-python <path-to-install-script> --repo robertofabiani2003-crypto/LITEC --path .
-```
-
-Or copy this folder into:
+Ask Codex to install the skill from this repository and specify the skill folder path:
 
 ```text
-~/.codex/skills/ozon-sku-presentation
+Install the Codex skill from https://github.com/robertofabiani2003-crypto/LITEC using the path skills/ozon-sku-presentation
 ```
+
+After installation, restart Codex so it picks up the new skill.
 
 ## Python dependencies
 
-The generator script expects these packages:
+The `ozon-sku-presentation` generator script expects:
 
 ```powershell
 pip install openpyxl python-pptx
 ```
-
-## Usage
-
-Run the skill explicitly with:
-
-```text
-$ozon-sku-presentation
-```
-
-Then provide:
-
-- input workbook path
-- template presentation path
-- output presentation path
