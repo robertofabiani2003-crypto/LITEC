@@ -1,0 +1,7 @@
+interface:
+  display_name: "Ozon SKU Presentation"
+  short_description: "Generate Ozon SKU PPTX decks from Excel"
+  default_prompt: "Use $ozon-sku-presentation to generate a .pptx deck for Ozon SKUs from a merged Excel workbook and a PPTX template."
+
+policy:
+  allow_implicit_invocation: false
