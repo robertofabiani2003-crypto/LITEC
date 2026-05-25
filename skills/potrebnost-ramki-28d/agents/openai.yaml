@@ -1,0 +1,4 @@
+interface:
+  display_name: "Potrebnost Ramki 28d"
+  short_description: "Build Ozon frame need workbooks from 28-day demand"
+  default_prompt: "Use $potrebnost-ramki-28d to export Ozon FBS sales, stock, and frame-level replenishment logic into an Excel workbook."
