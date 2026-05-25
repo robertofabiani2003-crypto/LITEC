@@ -18,6 +18,16 @@ class CabinetCreds:
     api_key: str
 
 
+def list_cabinet_names(env_path: Path) -> list[str]:
+    cabinets: list[str] = []
+    for raw in env_path.read_text(encoding="utf-8").splitlines():
+        line = raw.strip()
+        if not line or "=" in line:
+            continue
+        cabinets.append(line)
+    return cabinets
+
+
 def load_cabinet_creds(env_path: Path, cabinet_name: str) -> CabinetCreds:
     lines = env_path.read_text(encoding="utf-8").splitlines()
     for index, raw in enumerate(lines):
@@ -34,7 +44,12 @@ def load_cabinet_creds(env_path: Path, cabinet_name: str) -> CabinetCreds:
                 api_key = sub.split("=", 1)[1]
         if client_id and api_key:
             return CabinetCreds(client_id=client_id, api_key=api_key)
-    raise RuntimeError(f"Cabinet {cabinet_name!r} not found in {env_path}")
+    known_cabinets = ", ".join(list_cabinet_names(env_path)) or "<none>"
+    raise RuntimeError(
+        f"Cabinet {cabinet_name!r} not found or incomplete in {env_path}. "
+        f"Available cabinet sections: {known_cabinets}. "
+        "Expected format: cabinet name line, then OZON_API_KEY=..., then OZON_CLIENT_ID=..."
+    )
 
 
 class OzonSellerClient:

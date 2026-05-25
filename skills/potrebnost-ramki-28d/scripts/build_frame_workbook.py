@@ -230,10 +230,30 @@ def load_family_inputs(output_root: Path, cabinet: str, prefix: str) -> tuple[li
     return sales_detail, current_stock, offers_to_name
 
 
+def parse_family_cabinets(values: list[str]) -> dict[str, str]:
+    mapping: dict[str, str] = {}
+    for value in values:
+        family, sep, cabinet = value.partition("=")
+        family = family.strip()
+        cabinet = cabinet.strip()
+        if not sep or not family or not cabinet:
+            raise ValueError(
+                f"Invalid --family-cabinet value {value!r}. Expected format FAMILY_PREFIX=CABINET_NAME."
+            )
+        mapping[family] = cabinet
+    return mapping
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Build an Ozon frame replenishment workbook from family exports.")
-    parser.add_argument("cabinet", help="Cabinet name used in export folder names")
+    parser.add_argument("cabinet", help="Default cabinet used for families without an explicit mapping")
     parser.add_argument("--family", action="append", required=True, help="Family prefix such as K_T_M1X")
+    parser.add_argument(
+        "--family-cabinet",
+        action="append",
+        default=[],
+        help="Optional explicit source cabinet in the form FAMILY_PREFIX=CABINET_NAME",
+    )
     parser.add_argument("--output-root", type=Path, default=Path("outputs"), help="Directory containing family export folders")
     parser.add_argument("--frame-sheet-name", default="рамки", help="Name of the aggregated frame sheet")
     parser.add_argument("--workbook-path", type=Path, help="Target .xlsx path")
@@ -242,10 +262,12 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> None:
     args = parse_args()
+    family_cabinets = parse_family_cabinets(args.family_cabinet)
     family_rows_map: dict[str, list[dict]] = {}
     all_rows: list[dict] = []
     for family in args.family:
-        sales_detail, current_stock, offers_to_name = load_family_inputs(args.output_root, args.cabinet, family)
+        source_cabinet = family_cabinets.get(family, args.cabinet)
+        sales_detail, current_stock, offers_to_name = load_family_inputs(args.output_root, source_cabinet, family)
         rows = build_family_rows(offers_to_name, sales_detail, current_stock)
         family_rows_map[family] = rows
         all_rows.extend(rows)

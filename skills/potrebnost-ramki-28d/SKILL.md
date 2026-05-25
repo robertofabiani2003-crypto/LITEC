@@ -10,41 +10,42 @@ Use this skill for Ozon Seller workbook workflows where several SKU families sha
 ## Workflow
 
 1. Identify the cabinet and family prefixes.
-   Typical examples: `LITEC`, `K_T_M1X`, `K_T_A13X`.
+   Typical examples: `CABINET_A`, `K_T_M1X`, `K_T_A13X`.
 
 2. Read the workspace `.env`.
    The bundled scripts expect the cabinet format already used in this project:
    - one line with the cabinet name
    - one nearby `OZON_API_KEY=...`
    - one nearby `OZON_CLIENT_ID=...`
+   - if the file is missing or incomplete, point the user to `.env.example` in this skill and ask them to fill only the placeholder values
 
 3. Export raw family data.
-   Run `scripts/export_family_fbs.py` once per family prefix to fetch:
+   Run `scripts/export_family_fbs.py` once per family prefix, using the correct cabinet for that family, to fetch:
    - matching Ozon products
    - current FBS stocks by warehouse
    - FBS posting rows
    - CSV summaries in `outputs/`
 
 4. Build the workbook.
-   Run `scripts/build_frame_workbook.py` with the same cabinet and family list.
+   Run `scripts/build_frame_workbook.py` with the family list and explicit `--family-cabinet FAMILY=CABINET` mappings when families come from different client IDs.
    The workbook structure is:
    - one sheet per family prefix with per-article metrics
    - one aggregated frame sheet, default name `рамки`
 
-5. If the user asks to change formulas or audit a specific frame, read [references/business-rules.md](C:/Users/rober/.codex/skills/potrebnost-ramki-28d/references/business-rules.md) and then patch the workbook builder rather than improvising the logic in prose.
+5. If the user asks to change formulas or audit a specific frame, read `references/business-rules.md` and then patch the workbook builder rather than improvising the logic in prose.
 
 ## Commands
 
 Export one family:
 
 ```powershell
-python C:\Users\rober\.codex\skills\potrebnost-ramki-28d\scripts\export_family_fbs.py LITEC K_T_M1X --env C:\dev\LITEC\.env --output-root C:\dev\LITEC\outputs
+python .\scripts\export_family_fbs.py CABINET_A K_T_M1X --env .\.env --output-root .\outputs
 ```
 
 Build the combined workbook:
 
 ```powershell
-python C:\Users\rober\.codex\skills\potrebnost-ramki-28d\scripts\build_frame_workbook.py LITEC --family K_T_M1X --family K_T_A13X --output-root C:\dev\LITEC\outputs --workbook-path C:\dev\LITEC\outputs\litec_frames_combined.xlsx
+python .\scripts\build_frame_workbook.py CABINET_B --family K_T_M1X --family K_T_A13X --family-cabinet 'K_T_M1X=CABINET_A' --family-cabinet 'K_T_A13X=CABINET_B' --output-root .\outputs --workbook-path .\outputs\frame_replenishment.xlsx
 ```
 
 ## What To Keep Straight
