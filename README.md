@@ -12,6 +12,10 @@ skills/
     SKILL.md
     agents/openai.yaml
     scripts/generate_ozon_sku_presentation.py
+  ozon-competitor-analysis-mcp/
+    SKILL.md
+    README.md
+    agents/openai.yaml
   potrebnost-ramki-28d/
     SKILL.md
     agents/openai.yaml
@@ -50,6 +54,23 @@ Skill path in this repository:
 skills/potrebnost-ramki-28d
 ```
 
+### `ozon-competitor-analysis-mcp`
+
+Analyzes Ozon competitor-report rows through the LITEC OS MCP server and writes concise Russian comments back into the MCP report.
+
+Includes:
+
+- MCP token refresh workflow
+- current-week vs previous-week analysis
+- our SKU vs top competitor comparison when applicable
+- direct comment write-back through MCP
+
+Skill path in this repository:
+
+```text
+skills/ozon-competitor-analysis-mcp
+```
+
 ## Install
 
 Ask Codex to install the skill from this repository and specify the skill folder path:
@@ -62,6 +83,12 @@ or:
 
 ```text
 Install the Codex skill from https://github.com/robertofabiani2003-crypto/LITEC using the path skills/potrebnost-ramki-28d
+```
+
+or:
+
+```text
+Install the Codex skill from https://github.com/robertofabiani2003-crypto/LITEC using the path skills/ozon-competitor-analysis-mcp
 ```
 
 After installation, restart Codex so it picks up the new skill.

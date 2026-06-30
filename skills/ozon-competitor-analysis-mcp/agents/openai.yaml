@@ -1,0 +1,15 @@
+interface:
+  display_name: "Ozon Competitor MCP"
+  short_description: "Analyze Ozon MCP report rows and write comments"
+  default_prompt: "Use $ozon-competitor-analysis-mcp to refresh the LITEC OS MCP token when needed, analyze Ozon competitor report rows, and write concise Russian SKU comments through MCP."
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "ozon_analytics"
+      description: "LITEC OS Ozon competitor report MCP server"
+      transport: "streamable_http"
+      url: "https://admin.dixel.store/v1/integrations/ozon-analytics/mcp"
+
+policy:
+  allow_implicit_invocation: false
