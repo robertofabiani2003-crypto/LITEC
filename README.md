@@ -22,6 +22,13 @@ skills/
     references/business-rules.md
     scripts/export_family_fbs.py
     scripts/build_frame_workbook.py
+  ozon-seller-complaints/
+    SKILL.md
+    agents/openai.yaml
+    references/config.example.json
+    references/configuration.md
+    scripts/open_cdp_browser.ps1
+    scripts/run_ozon_complaints.mjs
 ```
 
 ## Available skills
@@ -71,6 +78,22 @@ Skill path in this repository:
 skills/ozon-competitor-analysis-mcp
 ```
 
+### `ozon-seller-complaints`
+
+Automates Ozon Seller support complaints against target SKUs using:
+
+- a logged-in local browser session over CDP
+- a seller-owned SKU
+- evidence files
+- a plain text SKU list or Excel source
+- resumable progress and log files
+
+Skill path in this repository:
+
+```text
+skills/ozon-seller-complaints
+```
+
 ## Install
 
 Ask Codex to install the skill from this repository and specify the skill folder path:
@@ -89,6 +112,12 @@ or:
 
 ```text
 Install the Codex skill from https://github.com/robertofabiani2003-crypto/LITEC using the path skills/ozon-competitor-analysis-mcp
+```
+
+or:
+
+```text
+Install the Codex skill from https://github.com/robertofabiani2003-crypto/LITEC using the path skills/ozon-seller-complaints
 ```
 
 After installation, restart Codex so it picks up the new skill.

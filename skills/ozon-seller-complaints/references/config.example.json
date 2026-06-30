@@ -1,0 +1,31 @@
+{
+  "cdpUrl": "http://127.0.0.1:9223",
+  "startUrl": "https://seller.ozon.ru/app/dashboard/main",
+  "ownSku": "1800392628",
+  "attachments": [
+    "./evidence/example-photo.jpg",
+    "./evidence/example-contract.pdf"
+  ],
+  "skuListPath": "./skus.txt",
+  "progressPath": "./ozon-complaints-progress.json",
+  "logPath": "./ozon-complaints-log.jsonl",
+  "storageStatePath": "./ozon-storage-state.json",
+  "maxAttemptsPerSku": 3,
+  "saveStorageStateOnFinish": true,
+  "closeBrowserOnFinish": false,
+  "flow": {
+    "helpEntry": "Не нашли ответ на свой вопрос?",
+    "categoryProducts": "Товары и Цены",
+    "categoryQuality": "Контроль качества",
+    "categoryViolation": "Нарушение правил площадки другим продавцом",
+    "categoryContent": "Использование моих фото, видео, текста",
+    "actionComplain": "Пожаловаться на другой товар",
+    "promptOwnSku": "Пришлите SKU вашего товара",
+    "promptTargetSku": "Перейдите в карточку товара",
+    "promptSingleValue": "Пришлите только одно скопированное значение",
+    "successPrefix": "Скрыли товар",
+    "refresh": "Обновить",
+    "loadError": "Что-то пошло не так",
+    "chatListError": "Не удалось загрузить список чатов"
+  }
+}

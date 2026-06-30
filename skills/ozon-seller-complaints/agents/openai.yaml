@@ -1,0 +1,4 @@
+interface:
+  display_name: "Ozon Seller Complaints"
+  short_description: "Automate Ozon Seller complaint workflows"
+  default_prompt: "Use $ozon-seller-complaints to configure and run Ozon Seller complaints for my own account and SKU list."
