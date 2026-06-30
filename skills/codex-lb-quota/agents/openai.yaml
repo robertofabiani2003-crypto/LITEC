@@ -1,0 +1,7 @@
+interface:
+  display_name: "Codex LB Quota"
+  short_description: "Check codex-lb API key balance and quota usage"
+  default_prompt: "Use $codex-lb-quota to inspect a codex-lb API key quota, remaining balance, reset time, and organization-wide shared quota."
+
+policy:
+  allow_implicit_invocation: false
